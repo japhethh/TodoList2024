@@ -15,7 +15,7 @@ const upload = multer({storage:storage})
 
 
 userRouter.post("/register",upload.single("image"),registerUser);
-userRouter.get("/getUser",getUser);
+userRouter.get("/getUser",auth,getUser);
 userRouter.post("/addList",addListToUser);
 userRouter.post("/addItem",addItemToList);
 userRouter.get("/getList",auth,getList)

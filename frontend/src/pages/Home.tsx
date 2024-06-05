@@ -1,13 +1,29 @@
-import TodoListDisplay from '../components/TodoListDisplay'
+import React, { useContext } from 'react';
+import TodoListDisplay from '../components/TodoListDisplay';
+import { ListContext } from '../context/ListContext';
 
-type Props = {}
 
-const Home = (props: Props) => {
+const Home = () => {
+  
+  const context = useContext(ListContext);
+
+  if (!context) {
+    // Handle the case where the context is null (e.g., by showing an error or loading state)
+    return <div>Loading...</div>;
+  }
+
+  const { userInfo, dispatch } = context;
+
   return (
     <div className='mx-auto w-5/6'>
-      <TodoListDisplay/>
+      {userInfo.user && (
+        <div>
+          {userInfo.user.name}
+        </div>
+      )}
+      {/* <TodoListDisplay/> */}
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;

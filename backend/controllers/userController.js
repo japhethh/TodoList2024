@@ -57,7 +57,7 @@
         return res.json({success:false,message:"Invalid Credentials"})
       }
       const token = createToken(user._id);
-      res.json({success:true,token,message:"Login Successfully"})
+      res.json({success:true,token,message:"Login Successful"})
     } catch (error) {
       console.log(error);
       res.json({success:false,message:"Error"});
@@ -70,9 +70,10 @@
 
 
   const getUser = async (req, res) => {
+    const {userId} = req.body;
     try {
-      const user = await UserModel.find();
-      res.json({ success: true, user });
+      const user = await UserModel.findById(userId);
+      res.json({ success: true,message:"jtangina", user });
     } catch (error) {
       console.log(error);
       res.json({ success: false, message: "Error" });
