@@ -1,4 +1,4 @@
-import { registerUser,getUser,addListToUser,addItemToList,getList } from "../controllers/userController.js";
+import { registerUser,getUser,addListToUser,addItemToList,getList,loginUser } from "../controllers/userController.js";
 import express from 'express'
 import multer from 'multer'
 import auth from '../middleware/auth.js'
@@ -19,5 +19,6 @@ userRouter.get("/getUser",getUser);
 userRouter.post("/addList",addListToUser);
 userRouter.post("/addItem",addItemToList);
 userRouter.get("/getList",auth,getList)
+userRouter.post("/login",upload.single("image"),loginUser)
 
 export default userRouter

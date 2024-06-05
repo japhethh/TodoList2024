@@ -1,30 +1,65 @@
-import React, { useState, createContext, ReactNode, useEffect } from 'react';
+import React, { useState, createContext, ReactNode, useEffect, useReducer, Dispatch } from 'react';
+import axios from 'axios';
 
-import axios from 'axios' 
+export const ListContext = createContext<ContextType | null>(null);
 
+type StateType = {
+  user: any;
+};
 
-export const ListContext = createContext({dataList:[]});
+type ActionType = {
+  type: string;
+  payload: any;
+};
+
+type ContextType = {
+  dataList: any[];
+  token: string;
+  setToken: React.Dispatch<React.SetStateAction<string>>;
+  userInfo: StateType;
+  dispatch: Dispatch<ActionType>;
+};
+
+const reducer = (state: StateType, action: ActionType): StateType => {
+  switch (action.type) {
+    case "GET_USER":
+      return {
+        ...state,
+        user: action.payload
+      };
+    default:
+      return state;
+  }
+};
 
 type Props = {
   children: ReactNode;
 };
 
-const ListContextProvider= ({ children }:Props) => {
-  const url = "http://localhost:4000"
-  const [dataList, setDataList] = useState([]);
-
+const ListContextProvider:React.FC<Props>= ({ children }) => {
+  const url = "http://localhost:4000";
+  const [dataList, setDataList] = useState<any[]>([]);
+  const [token, setToken] = useState<string>("");
+  const [userInfo, dispatch] = useReducer(reducer, { user: null });
 
   useEffect(() => {
-  const loadingList = async () => {
-    const response = await axios.get(`${url}/api/user/getList`)
-  setDataList(response.data.user)
-  }
+    const loadingList = async () => {
+      try {
+        const response = await axios.get(`${url}/api/user/getList`);
+        setDataList(response.data.user);
+      } catch (error) {
+        console.error("Error loading list:", error);
+      }
+    };
     loadingList();
-  console.log(contextValue.dataList)
+  }, []);
 
-  },[])
-  const contextValue = {
-      dataList,
+  const contextValue: ContextType = {
+    dataList,
+    token,
+    setToken,
+    userInfo,
+    dispatch
   };
 
   return (
